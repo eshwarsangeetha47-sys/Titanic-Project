@@ -1,16 +1,10 @@
-
-
-import os
+import streamlit as st
 import psycopg2
 import pandas as pd
 
 def get_connection():
     conn = psycopg2.connect(
-        host="localhost",
-        database="titanic_db",
-        user="postgres",
-        password=os.getenv("PGPASSWORD"),
-        port="5432"
+        st.secrets["DATABASE_URL"]
     )
     return conn
 
@@ -19,11 +13,10 @@ def get_data():
 
     query = """
     SELECT *
-    FROM titanic_project.passengers
+    FROM passengers
     """
 
     df = pd.read_sql(query, conn)
     conn.close()
 
     return df
-
